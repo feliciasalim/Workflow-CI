@@ -17,7 +17,7 @@ model = RandomForestClassifier(
     random_state=42
 )
 
-with mlflow.start_run(run_name="Stroke Workflow"):
+with mlflow.start_run():
     model.fit(X_train, y_train)
     accuracy = model.score(X_test, y_test)
     
