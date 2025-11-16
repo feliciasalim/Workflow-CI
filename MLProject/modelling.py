@@ -9,7 +9,7 @@ df_test  = pd.read_csv("stroke_preprocessing/data_test.csv")
 X_train, y_train = df_train.drop('stroke', axis=1), df_train['stroke']
 X_test,  y_test  = df_test.drop('stroke', axis=1),  df_test['stroke']
 
-mlflow.set_experiment("stroke-prediction")
+mlflow.set_experiment("stroke-prediction", nested=True)
 mlflow.sklearn.autolog()
 
 model = RandomForestClassifier(
