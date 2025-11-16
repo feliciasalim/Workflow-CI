@@ -40,22 +40,6 @@ jobs:
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
 
-      - name: Verify Model Exists
-        run: |
-          cd MLProject
-          echo "Checking for model artifacts..."
-          ls -la mlruns/0/${{ env.RUN_ID }}/artifacts/
-          
-          if [ ! -d "mlruns/0/${{ env.RUN_ID }}/artifacts/model" ]; then
-            echo "Error: Model directory not found!"
-            echo "Available artifacts:"
-            ls -la mlruns/0/${{ env.RUN_ID }}/artifacts/
-            exit 1
-          fi
-          
-          echo "Model found successfully!"
-          ls -la mlruns/0/${{ env.RUN_ID }}/artifacts/model/
-
       - name: Build Docker Model
         run: |
           cd MLProject

@@ -16,11 +16,10 @@ model = RandomForestClassifier(
     random_state=42
 )
 
-with mlflow.start_run():
-    model.fit(X_train, y_train)
-    accuracy = model.score(X_test, y_test)
-    
-    mlflow.log_metric("accuracy", accuracy)
-    mlflow.sklearn.log_model(model, "model")
-    
-    print(f"Test Accuracy: {accuracy}")
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+
+mlflow.log_metric("accuracy", accuracy)
+mlflow.sklearn.log_model(model, "model")
+
+print(f"Test Accuracy: {accuracy}")
