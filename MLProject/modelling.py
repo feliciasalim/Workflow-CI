@@ -17,7 +17,6 @@ model = RandomForestClassifier(
 )
 
 with mlflow.start_run(run_name="stroke-prediction"):
-    mlflow,autolog()
     model.fit(X_train, y_train)
     accuracy = model.score(X_test, y_test)
     
