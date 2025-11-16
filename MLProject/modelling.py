@@ -21,6 +21,11 @@ with mlflow.start_run():
     accuracy = model.score(X_test, y_test)
     
     mlflow.log_metric("accuracy", accuracy)
-    mlflow.sklearn.log_model(model, "model")
+    
+    mlflow.sklearn.log_model(
+        model, 
+        "model",
+        input_example=X_train.iloc[:5]
+    )
     
     print(f"Test Accuracy: {accuracy}")
