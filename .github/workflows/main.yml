@@ -28,13 +28,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas numpy
 
-      - name: Run mlflow project
+      - name: Run training
         run: |
-          mlflow run MLproject --env-manager=local
-          
+          cd MLProject
+          python modelling.py
+
       - name: Get latest MLflow run_id
         run: |
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          cd MLProject
+          RUN_ID=$(ls -td mlruns/0/*/ 2>/dev/null | head -n 1 | cut -d'/' -f3)
+          if [ -z "$RUN_ID" ]; then
+            echo "Error: No run found"
+            ls -la mlruns/0/
+            exit 1
+          fi
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
 
