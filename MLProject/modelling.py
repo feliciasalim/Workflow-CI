@@ -21,3 +21,9 @@ model = RandomForestClassifier(
 model.fit(X_train, y_train)
 accuracy = model.score(X_test, y_test)
 print(f"Test Accuracy: {accuracy}")
+
+mlflow.sklearn.log_model(
+    sk_model=model,
+    artifact_path="model",
+    registered_model_name="stroke-prediction-model"
+)
