@@ -36,7 +36,8 @@ jobs:
       - name: Get latest MLflow run_id
         run: |
           cd MLProject
-          RUN_ID=$(ls -td mlruns/0/*/ 2>/dev/null | head -n 1 | cut -d'/' -f3)
+          EXPERIMENT_ID=$(find mlruns -mindepth 1 -maxdepth 1 -type d ! -name ".trash" -exec basename {} \; | head -n 1)
+          RUN_ID=$(ls -t mlruns/$EXPERIMENT_ID/ | grep -E '^[a-f0-9]{32}$' | head -n 1)
           if [ -z "$RUN_ID" ]; then
             echo "Error: No run found"
             ls -la mlruns/0/
