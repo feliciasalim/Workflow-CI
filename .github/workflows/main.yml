@@ -36,14 +36,21 @@ jobs:
       - name: Get latest MLflow run_id
         run: |
           cd MLProject
-          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          RUN_ID=$(ls -td mlruns/0/*/ 2>/dev/null | head -n 1 | cut -d'/' -f3)
+          if [ -z "$RUN_ID" ]; then
+            echo "Error: No run found"
+            ls -la mlruns/0/
+            exit 1
+          fi
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
 
       - name: Build Docker Model
         run: |
           cd MLProject
-          mlflow models build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --name "cc"
+          RUN_ID="${{ env.RUN_ID }}"
+          echo "Building Docker image for run: $RUN_ID"
+          mlflow models build-docker --model-uri "runs:/${RUN_ID}/model" --name "cc"
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -58,11 +65,3 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest
-
-      - name: Save mlruns to repo
-        run: |
-          git config --global user.name "${{ secrets.USERNAME }}"
-          git config --global user.email "${{ secrets.EMAIL }}"
-          git add MLProject/mlruns/ || true
-          git commit -m "Save mlruns from CI run [skip ci]" || echo "No changes"
-          git push origin main || echo "No push needed"
