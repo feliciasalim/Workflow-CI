@@ -28,10 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas numpy
 
-      - name: Run mlflow project
+      - name: Run training
         run: |
           cd MLProject
-          mlflow run . --env-manager=local
+          python modelling.py
 
       - name: Get latest MLflow run_id
         run: |
