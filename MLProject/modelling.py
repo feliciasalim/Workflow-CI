@@ -11,6 +11,8 @@ X_test,  y_test  = df_test.drop('stroke', axis=1),  df_test['stroke']
 
 mlflow.set_experiment("stroke-prediction")
 
+mlflow.sklearn.autolog(log_models=True, registered_model_name="stroke-prediction-model")
+
 model = RandomForestClassifier(
     class_weight='balanced',
     random_state=42
@@ -18,8 +20,5 @@ model = RandomForestClassifier(
 
 model.fit(X_train, y_train)
 accuracy = model.score(X_test, y_test)
-
-mlflow.log_metric("accuracy", accuracy)
-mlflow.sklearn.log_model(model, "model")
-
 print(f"Test Accuracy: {accuracy}")
+print("Model logged automatically by autolog!")
