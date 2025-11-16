@@ -10,6 +10,7 @@ X_train, y_train = df_train.drop('stroke', axis=1), df_train['stroke']
 X_test,  y_test  = df_test.drop('stroke', axis=1),  df_test['stroke']
 
 mlflow.set_experiment("stroke-prediction")
+
 mlflow.sklearn.autolog()
 
 model = RandomForestClassifier(
@@ -17,7 +18,6 @@ model = RandomForestClassifier(
     random_state=42
 )
 
-with mlflow.start_run(run_name="stroke-prediction", nested=True):
-    model.fit(X_train, y_train)
-    accuracy = model.score(X_test, y_test)
-    
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+print(f"Test Accuracy: {accuracy}")
